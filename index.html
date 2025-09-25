@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+    <title>Blogg Plattform</title>
+  </head>
+  <body>
+    <header>
+      <h1>Blogg Plattform</h1>
+    </header>
+    <main>
+      <div>
+        <button class="makeBtn">Skapa inlägg</button>
+      </div>
+      <div class="formContainer hidden">
+        <div class="postForm">
+          <h2>Inlägg</h2>
+          <form>
+            <div class="formItem">
+              <label for="title">Title: </label>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Title"
+                required
+              />
+            </div>
+            <div class="formItem">
+              <label for="namn">Namn: </label>
+              <input
+                type="text"
+                name="namn"
+                id="namn"
+                placeholder="Namn"
+                required
+              />
+            </div>
+            <div class="formItem">
+              <label for="text">Innehåll: </label>
+              <textarea
+                name="text"
+                id="text"
+                placeholder="Innehåll"
+                required
+              ></textarea>
+            </div>
+            <div class="formBtn">
+              <button type="submit" id="submitBtn">Lägg upp inlägg</button>
+              <button type="button" id="cancelBtn">Avbryt</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="postContainer"></div>
+    </main>
+  </body>
+</html>
