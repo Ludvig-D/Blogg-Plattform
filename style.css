@@ -5,6 +5,12 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+@media (width >= 900px) {
+  .postContainer {
+    width: 100%;
+  }
+}
+
 html,
 body {
   height: 100vh;
@@ -19,6 +25,12 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.toggleContainer {
+  display: flex;
+  justify-content: flex-start;
+  width: 50%;
 }
 
 .formContainer {
@@ -61,12 +73,17 @@ main {
   display: flex;
   width: 50%;
   flex-direction: column;
+  margin-top: 1rem;
+  gap: 1rem;
 }
 
 .post {
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 2rem;
+  border: 2px solid black;
+  border-radius: 15px;
 }
 
 .headerDiv {

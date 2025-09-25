@@ -1,4 +1,4 @@
-const makeBtn = document.querySelector('.makeBtn');
+const toggleBtn = document.querySelector('#toggleBtn');
 const cancelBtn = document.querySelector('#cancelBtn');
 const submitBtn = document.querySelector('#submitBtn');
 
@@ -11,7 +11,7 @@ function toggleForm() {
   formContainer.classList.toggle('hidden');
 }
 
-makeBtn.addEventListener('click', () => {
+toggleBtn.addEventListener('click', () => {
   toggleForm();
 });
 
@@ -29,10 +29,6 @@ function createPost() {
     date.getMonth() + 1
   }/${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   console.log(postDate);
-
-  console.log('Title: ' + title);
-  console.log('Username: ' + username);
-  console.log('COntexxt: ' + text);
 
   const postDiv = document.createElement('div');
   postDiv.classList.add('post');
@@ -54,7 +50,7 @@ function createPost() {
 
   // Name of creator
   const nameP = document.createElement('p');
-  nameP.innerText = username;
+  nameP.innerText = username.charAt(0).toUpperCase() + username.slice(1);
   postDiv.appendChild(nameP);
 
   // Text in post
