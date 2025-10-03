@@ -2,6 +2,8 @@ const toggleBtn = document.querySelector('#toggleBtn');
 const cancelBtn = document.querySelector('#cancelBtn');
 const submitBtn = document.querySelector('#submitBtn');
 
+const delBtn = document.querySelector('.delBtn');
+
 const formContainer = document.querySelector('.formContainer');
 const postContainer = document.querySelector('.postContainer');
 
@@ -27,7 +29,7 @@ cancelBtn.addEventListener('click', () => {
 });
 
 function renderPost(post) {
-  const { title, username, text, id, date } = post;
+  const { title, username, text, id, date, dislikes, likes } = post;
 
   const postDiv = document.createElement('div');
   postDiv.classList.add('post');
@@ -63,31 +65,76 @@ function renderPost(post) {
   postDiv.appendChild(bottomDiv);
 
   const lcDiv = document.createElement('div');
+  lcDiv.classList.add('lcDiv');
+
   bottomDiv.appendChild(lcDiv);
 
   const likeBtn = document.createElement('button');
-  likeBtn.innerText = 'Like';
+  const likeSpan = document.createElement('span');
+  likeSpan.innerText = likes;
+  likeBtn.appendChild(likeSpan);
+  const likeIcon = document.createElement('img');
+  likeIcon.src = './icons/heart.png';
+  likeBtn.appendChild(likeIcon);
+  likeBtn.classList.add('likeBtn');
   lcDiv.appendChild(likeBtn);
 
+  likeBtn.addEventListener('click', (e) => {
+    const currentPost =
+      e.currentTarget.parentElement.parentElement.parentElement;
+    let btnText = parseInt(e.currentTarget.children[0].innerText);
+    e.currentTarget.children[0].innerText = btnText += 1;
+
+    posts.filter((post) => {
+      if (post.id === currentPost.id) {
+        return (post.likes = post.likes += 1);
+      }
+      return post;
+    });
+    savePosts();
+  });
+
   const dislikeBtn = document.createElement('button');
-  dislikeBtn.innerText = 'Dislike';
+  const dislikeSpan = document.createElement('span');
+  dislikeSpan.innerText = dislikes;
+  dislikeBtn.appendChild(dislikeSpan);
+  const dislikeIcon = document.createElement('img');
+  dislikeIcon.src = './icons/heart-crack.png';
+  dislikeBtn.appendChild(dislikeIcon);
+  dislikeBtn.classList.add('dislikeBtn');
+
+  dislikeBtn.addEventListener('click', (e) => {
+    const currentPost =
+      e.currentTarget.parentElement.parentElement.parentElement;
+    let btnText = parseInt(e.currentTarget.children[0].innerText);
+    e.currentTarget.children[0].innerText = btnText += 1;
+
+    posts.filter((post) => {
+      if (post.id === currentPost.id) {
+        return (post.dislikes = post.dislikes += 1);
+      }
+      return post;
+    });
+    savePosts();
+  });
+
   lcDiv.appendChild(dislikeBtn);
 
   const commentBtn = document.createElement('button');
-  commentBtn.innerText = 'Comment';
+  commentBtn.innerText = 'Commentarer';
   lcDiv.appendChild(commentBtn);
 
   const removeBtn = document.createElement('button');
   removeBtn.innerText = 'Tabort';
+  removeBtn.classList.add('delBtn');
   bottomDiv.appendChild(removeBtn);
 
   removeBtn.addEventListener('click', (e) => {
-    const postCon = e.target.parentElement.parentElement.parentElement;
     const postDel = e.target.parentElement.parentElement;
-    const postId = e.target.parentElement.parentElement.id;
+    const postId = postDel.id;
     posts = posts.filter((post) => post.id !== postId);
     savePosts();
-    postCon.removeChild(postDel);
+    postContainer.removeChild(postDel);
   });
 
   postContainer.appendChild(postDiv);
@@ -101,7 +148,7 @@ submitBtn.addEventListener('click', (e) => {
   toggleForm();
 });
 
-async function savePosts() {
+function savePosts() {
   localStorage.setItem('posts', JSON.stringify(posts));
 }
 
@@ -122,6 +169,8 @@ function createPostInfo() {
     title: postForm[0].value,
     username: postForm[1].value,
     text: postForm[2].value,
+    dislikes: 0,
+    likes: 0,
     id: crypto.randomUUID(),
     date: postDate,
   };
