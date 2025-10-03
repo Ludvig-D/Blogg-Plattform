@@ -51,9 +51,10 @@ function renderPost(post) {
   postDiv.appendChild(topDiv);
 
   // Name of creator
-  const nameP = document.createElement('p');
-  nameP.innerText = username.charAt(0).toUpperCase() + username.slice(1);
-  postDiv.appendChild(nameP);
+  const author = document.createElement('p');
+  author.innerText = username.charAt(0).toUpperCase() + username.slice(1);
+  author.classList.add('author');
+  postDiv.appendChild(author);
 
   // Text in post
   const textP = document.createElement('p');
@@ -212,17 +213,22 @@ function renderCommentDiv(lcDiv, postDiv) {
   commentBtn.innerText = 'Commentarer';
   lcDiv.appendChild(commentBtn);
 
-  const addCommentDiv = document.createElement('div');
-  addCommentDiv.classList.add('hidden');
+  const commentContainer = document.createElement('div');
+  commentContainer.classList.add('commentContainer');
+  commentContainer.classList.add('hidden');
+  postDiv.appendChild(commentContainer);
 
-  postDiv.appendChild(addCommentDiv);
+  const addCommentDiv = document.createElement('div');
+
+  commentContainer.appendChild(addCommentDiv);
 
   const commentForm = document.createElement('form');
+  addCommentDiv.classList.add('commentForm');
   addCommentDiv.appendChild(commentForm);
 
   const commentFormLabel = document.createElement('label');
   commentFormLabel.htmlFor = 'comment';
-  commentFormLabel.innerText = 'Comment: ';
+  commentFormLabel.innerText = 'Commentera';
   commentForm.appendChild(commentFormLabel);
 
   const commentFormTextArea = document.createElement('textarea');
@@ -245,13 +251,10 @@ function renderCommentDiv(lcDiv, postDiv) {
   });
 
   const commentsDiv = document.createElement('div');
-  commentsDiv.classList.add('hidden');
-  postDiv.appendChild(commentsDiv);
+  commentContainer.appendChild(commentsDiv);
 
   commentBtn.addEventListener('click', () => {
-    commentsDiv.classList.toggle('hidden');
-    addCommentDiv.classList.toggle('hidden');
-    addCommentDiv.classList.toggle('commentForm');
+    commentContainer.classList.toggle('hidden');
   });
 
   posts.map((post) => {
@@ -265,6 +268,7 @@ function renderCommentDiv(lcDiv, postDiv) {
 
 function renderComment(comment, commentsDiv) {
   const commentDiv = document.createElement('div');
+  commentDiv.classList.add('comment');
   commentDiv.id = comment.id;
 
   const commentText = document.createElement('p');
