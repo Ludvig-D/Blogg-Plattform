@@ -58,6 +58,7 @@ function renderPost(post) {
   // Text in post
   const textP = document.createElement('p');
   textP.innerText = text;
+  textP.classList.add('text');
   postDiv.appendChild(textP);
 
   const bottomDiv = document.createElement('div');
@@ -69,7 +70,9 @@ function renderPost(post) {
 
   bottomDiv.appendChild(lcDiv);
 
+  // Like Button
   const likeBtn = document.createElement('button');
+  likeBtn.dataset.Type = 'likes';
   const likeSpan = document.createElement('span');
   likeSpan.innerText = likes;
   likeBtn.appendChild(likeSpan);
@@ -80,21 +83,12 @@ function renderPost(post) {
   lcDiv.appendChild(likeBtn);
 
   likeBtn.addEventListener('click', (e) => {
-    const currentPost =
-      e.currentTarget.parentElement.parentElement.parentElement;
-    let btnText = parseInt(e.currentTarget.children[0].innerText);
-    e.currentTarget.children[0].innerText = btnText += 1;
-
-    posts.filter((post) => {
-      if (post.id === currentPost.id) {
-        return (post.likes = post.likes += 1);
-      }
-      return post;
-    });
-    savePosts();
+    likeHandler(e);
   });
 
+  // Dislike Button
   const dislikeBtn = document.createElement('button');
+  dislikeBtn.dataset.Type = 'dislikes';
   const dislikeSpan = document.createElement('span');
   dislikeSpan.innerText = dislikes;
   dislikeBtn.appendChild(dislikeSpan);
@@ -104,33 +98,21 @@ function renderPost(post) {
   dislikeBtn.classList.add('dislikeBtn');
 
   dislikeBtn.addEventListener('click', (e) => {
-    const currentPost =
-      e.currentTarget.parentElement.parentElement.parentElement;
-    let btnText = parseInt(e.currentTarget.children[0].innerText);
-    e.currentTarget.children[0].innerText = btnText += 1;
-
-    posts.filter((post) => {
-      if (post.id === currentPost.id) {
-        return (post.dislikes = post.dislikes += 1);
-      }
-      return post;
-    });
-    savePosts();
+    likeHandler(e);
   });
 
   lcDiv.appendChild(dislikeBtn);
 
-  const commentBtn = document.createElement('button');
-  commentBtn.innerText = 'Commentarer';
-  lcDiv.appendChild(commentBtn);
+  renderComments(lcDiv, postDiv);
 
+  // Remove button
   const removeBtn = document.createElement('button');
   removeBtn.innerText = 'Tabort';
   removeBtn.classList.add('delBtn');
   bottomDiv.appendChild(removeBtn);
 
   removeBtn.addEventListener('click', (e) => {
-    const postDel = e.target.parentElement.parentElement;
+    const postDel = e.target.closest('.post');
     const postId = postDel.id;
     posts = posts.filter((post) => post.id !== postId);
     savePosts();
@@ -152,6 +134,27 @@ function savePosts() {
   localStorage.setItem('posts', JSON.stringify(posts));
 }
 
+function likeHandler(e) {
+  const btn = e.currentTarget;
+  const dataType = btn.dataset.Type;
+  const currentPost = btn.closest('.post');
+
+  let btnText = parseInt(btn.children[0].innerText);
+  btn.children[0].innerText = btnText += 1;
+
+  posts.filter((post) => {
+    if (post.id === currentPost.id) {
+      if (dataType == 'dislikes') {
+        return (post.dislikes = post.dislikes += 1);
+      } else if (dataType == 'likes') {
+        return (post.likes = post.likes += 1);
+      }
+    }
+    return post;
+  });
+  savePosts();
+}
+
 function reload() {
   posts = JSON.parse(localStorage.getItem('posts'));
   posts.map((post) => renderPost(post));
@@ -171,9 +174,72 @@ function createPostInfo() {
     text: postForm[2].value,
     dislikes: 0,
     likes: 0,
+    comments: [],
     id: crypto.randomUUID(),
     date: postDate,
   };
   posts.push(post);
   return post;
+}
+
+function createComment(e, commentValue) {
+  const postid = e.target.closest('.post').id;
+  const comment = {
+    comment: commentValue,
+    id: crypto.randomUUID(),
+  };
+  posts.filter((post) => {
+    if (post.id == postid) {
+      return post.comments.push(comment);
+    }
+    return post;
+  });
+  console.log(posts);
+  return comment;
+}
+
+function renderComments(lcDiv, postDiv) {
+  // Comment button
+  const commentBtn = document.createElement('button');
+  commentBtn.innerText = 'Commentarer';
+  lcDiv.appendChild(commentBtn);
+
+  const addCommentDiv = document.createElement('div');
+  addCommentDiv.classList.add('commentForm');
+  addCommentDiv.classList.add('hidden');
+
+  postDiv.appendChild(addCommentDiv);
+
+  const commentForm = document.createElement('form');
+  addCommentDiv.appendChild(commentForm);
+
+  const commentFormLabel = document.createElement('label');
+  commentFormLabel.htmlFor = 'comment';
+  commentFormLabel.innerText = 'Comment: ';
+  commentForm.appendChild(commentFormLabel);
+
+  const commentFormTextArea = document.createElement('textarea');
+  commentFormTextArea.placeholder = 'Comment';
+  commentFormTextArea.name = 'comment';
+  commentFormTextArea.classList.add('comment');
+
+  commentForm.appendChild(commentFormTextArea);
+
+  const commentFormBtn = document.createElement('button');
+  commentFormBtn.innerText = 'Commentera';
+  commentForm.appendChild(commentFormBtn);
+
+  commentFormBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    createComment(e, commentForm[0].value);
+  });
+
+  const commentDiv = document.createElement('div');
+  commentDiv.classList.add('hidden');
+  postDiv.appendChild(commentDiv);
+
+  commentBtn.addEventListener('click', () => {
+    commentDiv.classList.toggle('hidden');
+    addCommentDiv.classList.toggle('hidden');
+  });
 }

@@ -86,6 +86,14 @@ main {
   border-radius: 15px;
 }
 
+.post p:first-of-type {
+  text-decoration: underline;
+}
+
+.text {
+  overflow-wrap: break-word;
+}
+
 .topDiv {
   display: flex;
   justify-content: space-between;
