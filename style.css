@@ -146,3 +146,8 @@ main {
 .delBtn:hover {
   background-color: #e60000;
 }
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+}

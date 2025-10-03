@@ -103,7 +103,7 @@ function renderPost(post) {
 
   lcDiv.appendChild(dislikeBtn);
 
-  renderComments(lcDiv, postDiv);
+  renderCommentDiv(lcDiv, postDiv);
 
   // Remove button
   const removeBtn = document.createElement('button');
@@ -183,10 +183,18 @@ function createPostInfo() {
 }
 
 function createComment(e, commentValue) {
+  const date = new Date();
+  const min =
+    date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+  const postDate = `${date.getFullYear()}/${
+    date.getMonth() + 1
+  }/${date.getDate()} ${date.getHours()}:${min}`;
+
   const postid = e.target.closest('.post').id;
   const comment = {
     comment: commentValue,
     id: crypto.randomUUID(),
+    date: postDate,
   };
   posts.filter((post) => {
     if (post.id == postid) {
@@ -194,18 +202,17 @@ function createComment(e, commentValue) {
     }
     return post;
   });
-  console.log(posts);
+  savePosts();
   return comment;
 }
 
-function renderComments(lcDiv, postDiv) {
+function renderCommentDiv(lcDiv, postDiv) {
   // Comment button
   const commentBtn = document.createElement('button');
   commentBtn.innerText = 'Commentarer';
   lcDiv.appendChild(commentBtn);
 
   const addCommentDiv = document.createElement('div');
-  addCommentDiv.classList.add('commentForm');
   addCommentDiv.classList.add('hidden');
 
   postDiv.appendChild(addCommentDiv);
@@ -231,15 +238,42 @@ function renderComments(lcDiv, postDiv) {
 
   commentFormBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    createComment(e, commentForm[0].value);
+    const comment = createComment(e, commentForm[0].value);
+    renderComment(comment, commentsDiv);
+
+    commentForm[0].value = '';
   });
 
-  const commentDiv = document.createElement('div');
-  commentDiv.classList.add('hidden');
-  postDiv.appendChild(commentDiv);
+  const commentsDiv = document.createElement('div');
+  commentsDiv.classList.add('hidden');
+  postDiv.appendChild(commentsDiv);
 
   commentBtn.addEventListener('click', () => {
-    commentDiv.classList.toggle('hidden');
+    commentsDiv.classList.toggle('hidden');
     addCommentDiv.classList.toggle('hidden');
+    addCommentDiv.classList.toggle('commentForm');
   });
+
+  posts.map((post) => {
+    if (post.id == postDiv.id) {
+      post.comments.map((comment) => {
+        renderComment(comment, commentsDiv);
+      });
+    }
+  });
+}
+
+function renderComment(comment, commentsDiv) {
+  const commentDiv = document.createElement('div');
+  commentDiv.id = comment.id;
+
+  const commentText = document.createElement('p');
+  commentText.innerText = comment.comment;
+  commentDiv.appendChild(commentText);
+
+  const commentDate = document.createElement('p');
+  commentDate.innerText = comment.date;
+  commentDiv.appendChild(commentDate);
+
+  commentsDiv.appendChild(commentDiv);
 }
