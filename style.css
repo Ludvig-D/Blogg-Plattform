@@ -164,11 +164,20 @@ main {
   display: none;
 }
 
+@media (width <= 1400px) {
+  .postForm {
+    width: 65%;
+  }
+}
+
 @media (width <= 900px) {
   .postContainer {
     width: 100%;
   }
   .postForm {
+    width: 100%;
+  }
+  .toggleContainer {
     width: 100%;
   }
 }
