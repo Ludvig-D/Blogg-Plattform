@@ -86,7 +86,12 @@ main {
   border-radius: 15px;
 }
 
-.headerDiv {
+.topDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottomDiv {
   display: flex;
   justify-content: space-between;
 }
