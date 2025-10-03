@@ -19,13 +19,13 @@ function toggleForm() {
 
 toggleBtn.addEventListener('click', () => {
   toggleForm();
+  postForm[0].value = '';
+  postForm[1].value = '';
+  postForm[2].value = '';
 });
 
 cancelBtn.addEventListener('click', () => {
   toggleForm();
-  postForm[0].value = '';
-  postForm[1].value = '';
-  postForm[2].value = '';
 });
 
 function renderPost(post) {
@@ -104,6 +104,7 @@ function renderPost(post) {
 
   lcDiv.appendChild(dislikeBtn);
 
+  // Renders comment div
   renderCommentDiv(lcDiv, postDiv);
 
   // Remove button
@@ -157,11 +158,18 @@ function likeHandler(e) {
 }
 
 function reload() {
-  posts = JSON.parse(localStorage.getItem('posts'));
+  posts = JSON.parse(localStorage.getItem('posts')) || [];
   posts.map((post) => renderPost(post));
 }
 
 function createPostInfo() {
+  if (
+    postForm[0].value == '' ||
+    postForm[1].value == '' ||
+    postForm[2].value == ''
+  ) {
+    return;
+  }
   const date = new Date();
   const min =
     date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
@@ -184,6 +192,9 @@ function createPostInfo() {
 }
 
 function createComment(e, commentValue) {
+  if (commentValue == '') {
+    return;
+  }
   const date = new Date();
   const min =
     date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
@@ -211,6 +222,7 @@ function renderCommentDiv(lcDiv, postDiv) {
   // Comment button
   const commentBtn = document.createElement('button');
   commentBtn.innerText = 'Commentarer';
+  commentBtn.classList.add('commentBtn');
   lcDiv.appendChild(commentBtn);
 
   const commentContainer = document.createElement('div');
