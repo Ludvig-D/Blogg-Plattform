@@ -1,2 +1,3 @@
-***Blogg PlattForm
-Induvidualla inlämningen i frontend 1 (Nackademin)
+### Blogg PlattForm
+
+Individuella inlämningen i frontend 1 (Nackademin)
