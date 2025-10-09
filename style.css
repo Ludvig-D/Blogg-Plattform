@@ -27,6 +27,12 @@ main {
   width: 50%;
 }
 
+#toggleBtn {
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  border: none;
+}
+
 .formContainer {
   position: fixed;
   top: 0;
@@ -41,7 +47,7 @@ main {
 }
 
 .postForm {
-  background-color: rebeccapurple;
+  background-color: #f9f9f9;
   width: 30%;
   padding: 3rem 3rem;
   border-radius: 10px;
@@ -57,6 +63,31 @@ main {
   display: flex;
   justify-content: space-between;
   margin: 0.5rem 0;
+}
+
+.formBtn button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+#cancelBtn {
+  background-color: #ff0000;
+  color: #fff;
+}
+
+#cancelBtn:hover {
+  background-color: #d70202;
+}
+
+#submitBtn {
+  background-color: #009dff;
+  color: #fff;
+}
+
+#submitBtn:hover {
+  background-color: #0059ff;
 }
 
 .postContainer {
@@ -99,65 +130,127 @@ main {
   gap: 5px;
 }
 
+.lcDiv img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .likeBtn {
-  box-sizing: none;
+  box-sizing: content-box;
   display: flex;
-  background-color: white;
-  border-radius: 5px;
-  padding: 0.1rem 0.3rem;
+  background-color: #00e60c;
+  border-radius: 3px;
+  padding: 0.5rem;
   gap: 0.2rem;
+  border: none;
+  font-size: 1rem;
 }
 
 .dislikeBtn {
-  box-sizing: none;
+  box-sizing: content-box;
   display: flex;
-  background-color: white;
-  border-radius: 5px;
+  background-color: #ff0000;
+  border-radius: 3px;
   flex-direction: row-reverse;
-  padding: 0.1rem 0.3rem;
+  padding: 0.5rem;
   gap: 0.2rem;
+  border: none;
+  font-size: 1rem;
 }
 
 .dislikeBtn:hover {
-  background-color: #e60000;
+  background-color: #d70202;
 }
 
 .likeBtn:hover {
-  background-color: #00e60c;
+  background-color: #03ae0b;
 }
 
 .delBtn {
+  box-sizing: none;
   background-color: red;
-  border-radius: 5px;
-  width: 4rem;
-  border: 2px solid black;
+  border-radius: 3px;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
 }
 
 .delBtn:hover {
-  background-color: #e60000;
+  background-color: #d70202;
+}
+
+.commentBtn {
+  border-radius: 3px;
+  padding: 0 1rem;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.commentBtn:hover {
+  background-color: #afadad;
+}
+
+.commentForm {
+  padding: 0 1rem 2rem;
+  background-color: #f9f9f9;
+  border: 1px solid #e4e4e4;
+  border-radius: 3px;
+  margin-top: 1rem;
 }
 
 .commentForm form {
   display: flex;
   flex-direction: column;
   text-align: center;
+  padding: 0 1rem;
+  gap: 2px;
 }
 
 .commentContainer {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  padding: 0 1rem;
 }
 
 .comment {
-  border-bottom: 2px solid black;
   display: flex;
-  justify-content: space-between;
   text-decoration: none;
+  padding: 1rem;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  border: 1px solid #e4e4e4;
+  border-radius: 3px;
 }
 
-.commentBtn:hover {
-  background-color: #535353;
-  border-radius: 5px;
+.adDiv {
+  display: flex;
+  justify-content: space-between;
+}
+
+.removeBtnDiv {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.commentsDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commentFormBtn {
+  background-color: #009dff;
+  border: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.commentFormBtn:hover {
+  background-color: #0059ff;
 }
 
 .hidden {

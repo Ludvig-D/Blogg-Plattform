@@ -248,18 +248,19 @@ function renderCommentDiv(lcDiv, postDiv) {
 
   const commentAuthorFormInput = document.createElement('input');
   commentAuthorFormInput.placeholder = 'Author';
-  commentAuthorFormInput.classList.add('comment');
+  commentAuthorFormInput.classList.add('commentInputs');
 
   commentForm.appendChild(commentAuthorFormInput);
 
   const commentFormTextArea = document.createElement('textarea');
   commentFormTextArea.placeholder = 'Comment';
-  commentFormTextArea.classList.add('comment');
+  commentFormTextArea.classList.add('commentInputs');
 
   commentForm.appendChild(commentFormTextArea);
 
   const commentFormBtn = document.createElement('button');
-  commentFormBtn.innerText = 'Commentera';
+  commentFormBtn.innerText = 'Lägg upp commentar';
+  commentFormBtn.classList.add('commentFormBtn');
   commentForm.appendChild(commentFormBtn);
 
   commentFormBtn.addEventListener('click', (e) => {
@@ -276,6 +277,7 @@ function renderCommentDiv(lcDiv, postDiv) {
   });
 
   const commentsDiv = document.createElement('div');
+  commentsDiv.classList.add('commentsDiv');
   commentContainer.appendChild(commentsDiv);
 
   commentBtn.addEventListener('click', () => {
@@ -301,7 +303,9 @@ function renderComment(comment, commentsDiv) {
   commentDiv.appendChild(adDiv);
 
   const commentAuthor = document.createElement('p');
-  commentAuthor.innerText = comment.author;
+  commentAuthor.innerText =
+    comment.author.charAt(0).toUpperCase() + comment.author.slice(1);
+  commentAuthor.classList.add('author');
   adDiv.appendChild(commentAuthor);
 
   const commentDate = document.createElement('p');
@@ -312,10 +316,14 @@ function renderComment(comment, commentsDiv) {
   commentText.innerText = comment.comment;
   commentDiv.appendChild(commentText);
 
+  const removeBtnDiv = document.createElement('div');
+  removeBtnDiv.classList.add('removeBtnDiv');
+  commentDiv.appendChild(removeBtnDiv);
+
   const removeBtn = document.createElement('button');
   removeBtn.innerText = 'Tabort';
   removeBtn.classList.add('delBtn');
-  commentDiv.appendChild(removeBtn);
+  removeBtnDiv.appendChild(removeBtn);
 
   removeBtn.addEventListener('click', (e) => {
     const commentDel = e.target.closest('.comment');
