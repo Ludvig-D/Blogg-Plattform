@@ -192,7 +192,9 @@ function createPostInfo() {
 }
 
 function createComment(e, commentValue) {
-  if (commentValue == '') {
+  const author = commentValue.author;
+  const comment = commentValue.comment;
+  if (author == '' || comment == '') {
     return;
   }
   const date = new Date();
@@ -203,19 +205,21 @@ function createComment(e, commentValue) {
   }/${date.getDate()} ${date.getHours()}:${min}`;
 
   const postid = e.target.closest('.post').id;
-  const comment = {
-    comment: commentValue,
+  const newComment = {
+    author: author,
+    comment: comment,
     id: crypto.randomUUID(),
     date: postDate,
   };
+
   posts.filter((post) => {
     if (post.id == postid) {
-      return post.comments.push(comment);
+      return post.comments.push(newComment);
     }
     return post;
   });
   savePosts();
-  return comment;
+  return newComment;
 }
 
 function renderCommentDiv(lcDiv, postDiv) {
@@ -238,14 +242,18 @@ function renderCommentDiv(lcDiv, postDiv) {
   addCommentDiv.classList.add('commentForm');
   addCommentDiv.appendChild(commentForm);
 
-  const commentFormLabel = document.createElement('label');
-  commentFormLabel.htmlFor = 'comment';
-  commentFormLabel.innerText = 'Commentera';
-  commentForm.appendChild(commentFormLabel);
+  const commentAuthorFormLabel = document.createElement('label');
+  commentAuthorFormLabel.innerText = 'Commentarer';
+  commentForm.appendChild(commentAuthorFormLabel);
+
+  const commentAuthorFormInput = document.createElement('input');
+  commentAuthorFormInput.placeholder = 'Author';
+  commentAuthorFormInput.classList.add('comment');
+
+  commentForm.appendChild(commentAuthorFormInput);
 
   const commentFormTextArea = document.createElement('textarea');
   commentFormTextArea.placeholder = 'Comment';
-  commentFormTextArea.name = 'comment';
   commentFormTextArea.classList.add('comment');
 
   commentForm.appendChild(commentFormTextArea);
@@ -256,10 +264,15 @@ function renderCommentDiv(lcDiv, postDiv) {
 
   commentFormBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    const comment = createComment(e, commentForm[0].value);
+    const commentInfo = {
+      author: commentForm[0].value,
+      comment: commentForm[1].value,
+    };
+    const comment = createComment(e, commentInfo);
     renderComment(comment, commentsDiv);
 
     commentForm[0].value = '';
+    commentForm[1].value = '';
   });
 
   const commentsDiv = document.createElement('div');
@@ -283,13 +296,42 @@ function renderComment(comment, commentsDiv) {
   commentDiv.classList.add('comment');
   commentDiv.id = comment.id;
 
+  const adDiv = document.createElement('div');
+  adDiv.classList.add('adDiv');
+  commentDiv.appendChild(adDiv);
+
+  const commentAuthor = document.createElement('p');
+  commentAuthor.innerText = comment.author;
+  adDiv.appendChild(commentAuthor);
+
+  const commentDate = document.createElement('p');
+  commentDate.innerText = comment.date;
+  adDiv.appendChild(commentDate);
+
   const commentText = document.createElement('p');
   commentText.innerText = comment.comment;
   commentDiv.appendChild(commentText);
 
-  const commentDate = document.createElement('p');
-  commentDate.innerText = comment.date;
-  commentDiv.appendChild(commentDate);
+  const removeBtn = document.createElement('button');
+  removeBtn.innerText = 'Tabort';
+  removeBtn.classList.add('delBtn');
+  commentDiv.appendChild(removeBtn);
+
+  removeBtn.addEventListener('click', (e) => {
+    const commentDel = e.target.closest('.comment');
+    const postId = commentDel.closest('.post').id;
+    const commentId = commentDel.id;
+
+    posts = posts.map((post) => {
+      if (post.id == postId) {
+        const comments = post.comments;
+        post.comments = comments.filter((comment) => comment.id != commentId);
+      }
+      return post;
+    });
+    savePosts();
+    commentsDiv.removeChild(commentDel);
+  });
 
   commentsDiv.appendChild(commentDiv);
 }
