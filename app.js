@@ -133,7 +133,8 @@ submitBtn.addEventListener('click', (e) => {
 });
 
 function savePosts() {
-  localStorage.setItem('posts', JSON.stringify(posts));
+  const jsonData = JSON.stringify(posts);
+  localStorage.setItem('posts', jsonData);
 }
 
 function likeHandler(e) {
@@ -179,12 +180,7 @@ function createPostInfo() {
   ) {
     return;
   }
-  const date = new Date();
-  const min =
-    date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-  const postDate = `${date.getFullYear()}/${
-    date.getMonth() + 1
-  }/${date.getDate()} ${date.getHours()}:${min}`;
+  const postDate = dateCreator();
 
   const post = {
     title: postForm[0].value,
@@ -206,12 +202,7 @@ function createComment(e, commentValue) {
   if (author == '' || comment == '') {
     return;
   }
-  const date = new Date();
-  const min =
-    date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
-  const postDate = `${date.getFullYear()}/${
-    date.getMonth() + 1
-  }/${date.getDate()} ${date.getHours()}:${min}`;
+  const postDate = dateCreator();
 
   const postid = e.target.closest('.post').id;
   const newComment = {
@@ -351,4 +342,14 @@ function renderComment(comment, commentsDiv) {
   });
 
   commentsDiv.appendChild(commentDiv);
+}
+
+function dateCreator() {
+  const date = new Date();
+  const min =
+    date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`;
+  const postDate = `${date.getFullYear()}/${
+    date.getMonth() + 1
+  }/${date.getDate()} ${date.getHours()}:${min}`;
+  return postDate;
 }
