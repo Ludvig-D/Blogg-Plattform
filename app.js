@@ -158,8 +158,17 @@ function likeHandler(e) {
 }
 
 function reload() {
-  posts = JSON.parse(localStorage.getItem('posts')) || [];
-  posts.map((post) => renderPost(post));
+  const postInfo = localStorage.getItem('posts');
+
+  if (postInfo) {
+    try {
+      posts = JSON.parse(postInfo);
+      posts.map((post) => renderPost(post));
+    } catch (error) {
+      console.error('Invalid JSON in localstorage', error);
+      localStorage.removeItem('posts');
+    }
+  }
 }
 
 function createPostInfo() {
